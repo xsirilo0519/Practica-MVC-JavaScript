@@ -17,6 +17,25 @@
     },
   };
 })();
+
+(function () {
+    self.Ball=function(x,y,radius,board) {
+        this.x=x;
+        this.y=y;
+        this.radius=radius;
+        this.board=board;
+        this.speed_y=0;
+        this.speed_x=3;
+        this.board.ball=this;
+        this.kind="circle"
+    }
+
+    /*self.Ball.prototype{
+
+    }*/
+})();
+
+
 //barras
 (function () {
   self.Bar = function (x, y, width, height, board) {
@@ -37,8 +56,8 @@
       this.y -= this.speed;
     },
     toString: function (params) {
-        return "x: "+this.x+"y: "+this.y;
-    }
+      return "x: " + this.x + "y: " + this.y;
+    },
   };
 })();
 //clase BoardView-vista
@@ -53,22 +72,34 @@
   };
 
   self.BoardView.prototype = {
+    clean: function () {
+      this.ctx.clearRect(0, 0, this.board.width, this.board.height);
+    },
     draw: function () {
       for (var i = this.board.elements.length - 1; i >= 0; i--) {
         var el = this.board.elements[i];
         draw(this.ctx, el);
       }
     },
+    play: function () {
+        this.clean();
+        this.draw();
+    }
   };
 
   function draw(ctx, element) {
     //hasOwnProperty dice si tiene una propiedad kind
-    if (element !== null && element.hasOwnProperty("kind")) {
-      switch (element.kind) {
-        case "rectangle":
-          ctx.fillRect(element.x, element.y, element.width, element.height);
-          break;
-      }
+
+    switch (element.kind) {
+    case "rectangle":
+        ctx.fillRect(element.x, element.y, element.width, element.height);
+        break;
+    case "circle":
+        ctx.beginPath();
+        ctx.arc(element.x,element.y,element.radius,0,7);
+        ctx.fill();
+        ctx.closePath();
+        break;
     }
   }
 })();
@@ -78,24 +109,25 @@ var barLeft = new Bar(10, 100, 40, 150, board);
 var barRight = new Bar(750, 100, 40, 150, board);
 var canvas = document.getElementById("canvas");
 var board_view = new BoardView(canvas, board);
+var ball=new Ball(350,100,10,board);
 
 document.addEventListener("keydown", function (ev) {
-    if (ev.key === "ArrowDown") {
-      barLeft.up();
-    } else if (ev.key === "ArrowUp") {
-      barLeft.down();
-    }
-    if (ev.key === "w") {
-        barRight.up();
-    } else if (ev.key === "s") {
-        barRight.down();
-    }
-  });
+  ev.preventDefault();
+  if (ev.key === "ArrowDown") {
+    barRight.down();
+  } else if (ev.key === "ArrowUp") {
+    barRight.up();
+  }
+  if (ev.key === "w") {
+    barLeft.up();
+  } else if (ev.key === "s") {
+    barLeft.down();
+  }
+});
 
-self.addEventListener("load", main);
-
+window.requestAnimationFrame(controller);
 //self=window
-function main() {
-  board_view.draw();
+function controller() {
+    board_view.play();
+  window.requestAnimationFrame(controller);
 }
-
