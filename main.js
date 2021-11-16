@@ -3,7 +3,7 @@
   self.Board = function (width, height) {
     this.width = width;
     this.height = height;
-    this.paying = false;
+    this.playing = true;
     this.game_over = false;
     this.bars = [];
     this.ball = null;
@@ -11,13 +11,16 @@
 
   self.Board.prototype = {
     get elements() {
-      var elements = this.bars;
+      var elements = this.bars.map(function (bar) {
+          return bar;
+      });
       elements.push(this.ball);
       return elements;
     },
   };
 })();
 
+//pelota
 (function () {
     self.Ball=function(x,y,radius,board) {
         this.x=x;
@@ -28,6 +31,13 @@
         this.speed_x=3;
         this.board.ball=this;
         this.kind="circle"
+        this.direccion=1;
+    }
+    self.Ball.prototype={
+        move: function(){
+            this.x+=(this.speed_x * this.direccion );
+            this.y+=(this.speed_y);
+        },
     }
 
     /*self.Ball.prototype{
@@ -82,8 +92,11 @@
       }
     },
     play: function () {
+        if(this.board.playing){
         this.clean();
         this.draw();
+        this.board.ball.move();
+        }
     }
   };
 
@@ -114,17 +127,26 @@ var ball=new Ball(350,100,10,board);
 document.addEventListener("keydown", function (ev) {
   ev.preventDefault();
   if (ev.key === "ArrowDown") {
+    ev.preventDefault();
     barRight.down();
   } else if (ev.key === "ArrowUp") {
+    ev.preventDefault();
     barRight.up();
   }
   if (ev.key === "w") {
+    ev.preventDefault();
     barLeft.up();
   } else if (ev.key === "s") {
+    ev.preventDefault();
     barLeft.down();
+  }
+  if(ev.key===" "){
+    ev.preventDefault();
+    board.playing=!board.playing;
   }
 });
 
+board_view.play();
 window.requestAnimationFrame(controller);
 //self=window
 function controller() {
