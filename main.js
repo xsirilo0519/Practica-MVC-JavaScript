@@ -43,15 +43,8 @@
         },
         collision: function (bar) {
             var relative_intersect_y= (bar.y +(bar.height/2))-this.y;
-            console.log(bar.y);
-            console.log(bar.height);
-            console.log(this.y);
-            console.log(relative_intersect_y);
             var normalized_intersect_y=relative_intersect_y / (bar.height/2);
-            console.log(normalized_intersect_y);
             this.bounce_angle=normalized_intersect_y*this.max_bounce_angle;
-            console.log(this.max_bounce_angle);
-            console.log( this.bounce_angle);
             this.speed_y=this.speed *-Math.sin(this.bounce_angle);
             this.speed_x=this.speed * Math.cos(this.bounce_angle);
 
@@ -59,10 +52,13 @@
             else this.direccion=1;
         },
         collisionBorder: function () {
-        
-            this.bounce_angle=2;
-            this.speed_x=this.speed *-Math.sin(this.bounce_angle);
-            this.speed_y=this.speed * Math.cos(this.bounce_angle);
+            if(this.y<=100){
+            this.speed_y=this.speed*Math.sin(this.bounce_angle)
+            this.speed_x=this.speed}
+            else{
+                this.speed_y=-this.speed*(Math.random()*(0.5-0.1)+0.1);
+                this.speed_x=this.speed}
+            
         },
         get width(){
             return this.radius*2;
@@ -89,14 +85,13 @@
   };
   self.Bar.prototype = {
     down: function () {
-      this.y += this.speed;
+        if(this.y!==250)
+            this.y += this.speed;
     },
     up: function () {
-      this.y -= this.speed;
-    },
-    toString: function (params) {
-      return "x: " + this.x + "y: " + this.y;
-    },
+        if(this.y!==0)
+          this.y -= this.speed;
+    }
   };
 })();
 //clase BoardView-vista
@@ -144,10 +139,10 @@
 
   function hitBorder(ball) {
     var hit = false;
-    if(ball.y+ball.height<=50){
+    if(ball.y+ball.radius<=ball.height){
         hit=true;
     }
-    if(ball.y+ball.height>=300){
+    if(ball.y+ball.radius>=400){
         hit=true;
     }
     return hit;
