@@ -20,7 +20,7 @@
   };
 })();
 
-//pelota
+//Pelota
 (function () {
     self.Ball=function(x,y,radius,board) {
         this.x=x;
@@ -71,7 +71,7 @@
 })();
 
 
-//barras
+//Barras
 (function () {
   self.Bar = function (x, y, width, height, board) {
     this.x = x;
@@ -136,6 +136,7 @@
             
           }
     },
+    // goles y score
     check_goal: function () {
        if (this.board.ball.x<0) {
         ball=new Ball(400,100,10,this.board);
@@ -152,6 +153,7 @@
     }
   };
 
+  //golpe con borde superior e inferior
   function hitBorder(ball) {
     var hit = false;
     if(ball.y+ball.radius<=ball.height){
@@ -163,6 +165,7 @@
     return hit;
   }
 
+  //golpe con barras
   function hit(a,b) {
       var hit = false;
 
@@ -183,10 +186,8 @@
       }
       return hit;
   }
-
+//dibujar elementos
   function draw(ctx, element) {
-    //hasOwnProperty dice si tiene una propiedad kind
-
     switch (element.kind) {
     case "rectangle":
         ctx.fillRect(element.x, element.y, element.width, element.height);
