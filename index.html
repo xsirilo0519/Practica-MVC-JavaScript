@@ -5,13 +5,25 @@
   <title>Practiva JavaScript</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-      canvas{border:solid}
+      #canvas{border:solid;}
+      .contenedorJuego{margin: auto;height: auto;display: flex;flex-direction: column;align-items: center;justify-content: center;}
+      .contenedor{width: 100%;height: auto;;display: flex;flex-direction: row; align-items: center;justify-content: center;}
+      .score{width: 80px;font-size: 20px;text-align: center;}
   </style>
 </head>
 
 <body>
-  <h1>Ping Pong Sebastian</h1>
-  <canvas id="canvas"></canvas>
+    <div class="contenedorJuego">
+    <div class="contenedor">
+        <div id="playerLeft" class="score"></div>
+        <h1>Ping Pong Sebastian</h1>
+        <div id="playerRight" class="score"></div>
+    </div>
+        <div>
+        <canvas id="canvas"></canvas> 
+    </div>
+    </div>
+
   <script src="main.js"></script>
 </body>
 </html>

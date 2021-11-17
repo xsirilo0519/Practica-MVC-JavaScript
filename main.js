@@ -28,7 +28,7 @@
         this.radius=radius;
         this.board=board;
         this.speed_y=0;
-        this.speed_x=3;
+        this.speed_x=5;
         this.board.ball=this;
         this.kind="circle"
         this.direccion=1;
@@ -121,6 +121,7 @@
         this.draw();
         this.check_collisions();
         this.board.ball.move();
+        this.check_goal();
         }
     },
     check_collisions: function () {
@@ -134,6 +135,20 @@
             }
             
           }
+    },
+    check_goal: function () {
+       if (this.board.ball.x<0) {
+        ball=new Ball(400,100,10,this.board);
+        this.play();
+        this.board.playing=!this.board.playing;
+        document.getElementById("playerRight").innerHTML=scorePlayerR+1;
+       }
+       else if(this.board.ball.x>800){
+        ball=new Ball(400,100,10,this.board);
+        this.play();
+        this.board.playing=!this.board.playing;
+        document.getElementById("playerLeft").innerHTML=scorePlayerL+1;
+       }
     }
   };
 
@@ -186,12 +201,17 @@
   }
 })();
 
+
+var scorePlayerL=0;
+var scorePlayerR=0;
+document.getElementById("playerLeft").innerHTML=scorePlayerL;
+document.getElementById("playerRight").innerHTML=scorePlayerR;
 var board = new Board(800, 400);
 var barLeft = new Bar(10, 100, 40, 150, board);
 var barRight = new Bar(750, 100, 40, 150, board);
 var canvas = document.getElementById("canvas");
 var board_view = new BoardView(canvas, board);
-var ball=new Ball(350,100,10,board);
+var ball=new Ball(400,100,10,board);
 
 document.addEventListener("keydown", function (ev) {
   ev.preventDefault();
